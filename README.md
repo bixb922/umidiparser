@@ -34,6 +34,7 @@ Example:
 Memory and CPU usage is optimized for a microcontroller with limited resources and Micropython. 
 CPU usage can be lowered even more by reusing the same MidiEvent over and over
 during the process, using the same event object over and over again:
+
     for event in MidiFile("example.mid", reuse_event_object=True ):
         ... process event....
 
@@ -53,7 +54,7 @@ much larger than the available heap or RAM.
 The parser will parse midi files format type 0, 1 and 2. Running status events are
 recognized. All standard MIDI channel events (note on, note off,
 program change, control change, etc) and meta and sysex events (track name,
-key signature, time signature, etc) recognized.
+key signature, time signature, etc) recognized. This library is based on the MIDI file standard version 1.1
 
 The set tempo meta events and the "pulses per beat"
 (aka "midi ticks per quarter note")
@@ -63,7 +64,7 @@ because floating point processing may be slow on some microcontrollers.
 The Micropython function *utime.sleep_us( event.delta_us )* can be used to sleep between events.
 Set tempo events may be present in any track.
 
-Multitrack file type 1 files are supported, and tracks are automatically
+For multitrack file type 1 files, tracks are automatically
 merged during playback.
 
 MIDI file format errors such as running status event at the beginning of
@@ -79,17 +80,13 @@ program.
 There are no capabilities to modify or create MIDI files.
 
 ## CPU AND RAM USAGE
-Parsing on a ESP32 WROOM with Micropython takes about
-one millisecond, and even less if you use the reuse_event_object
+Parsing on a ESP32 at 200 Mhz CPU clock with Micropython takes about
+one millisecond per event, and even less if you use the reuse_event_object
 of the MidiFile object.
-That should be enough for playback of music files,
-where there will be, in average, a time of several tens of
-milliseconds between events, and where a delay of a couple of
-milliseconds will not be noticed by the human ear.
 
 With the reuse_event_object parameter set to true, CPU overhead should be
 about 15% lower, and less heap is used.
-On the ESP32-WROOM, parsing a MIDI file with buffer_size=100 and
+On the ESP32, parsing a MIDI file with buffer_size=100 and
 reuse_event_object=True uses about 20kbytes of heap. Each event will
 allocate and free less than 100 bytes of heap, so garbage collections are not
 frequent if little RAM is available.
@@ -106,8 +103,6 @@ Micropython. Not tested on CircuitPython so far.
 The starting point is the MidiFile object, allowing to iterate through
 the events. Events are returned as MidiEvent objects, and the fields
 of the event are visible as attributes of the MidiEvent.
-The tracks of a MIDI file are also
-visible as MidiTrack objects, and each track can be played individually.
 
 ## DEPENDENCIES
 Imports *time/utime*. Provides a wrapper to work with CPython "import time".
@@ -127,6 +122,8 @@ through the events of a certain track, see the iterator and the *play* method.
 
 To get all the events of a format type 0 or format type 1 MIDI file,
 iterate through the MidiFile object, for example:
+    
+    import umidiparser
     for event in MidiFile("example.mid"):
         print(event)
 
@@ -143,15 +140,10 @@ events may be in track 0 (as it is usually done), or they may occur in any track
 For a multitrack file, event.delta_us is the time difference with the
 previous event, which may be in the same or a different track.
 
-For a format type 2 MIDI file, a single track must be selected, see MidiTrack object.
+For a format type 2 MIDI file, a single track must be selected, see MidiFile.play method.
 
-To process each event at the time due, a simple version you could use:
-    for event in MidiFile("example.mid"):
-        time.sleep_us( event.delta_us )
-        ... process the event ...
-
-To implement this function with time error compensation, use the
-MidiFile.play method.
+To get each event at the proper time of the event, use the 
+MidiFile.play method. This method compensates for the delays during processing.
 
 In all cases, only one end of track meta event is returned
 to the caller when the end of file is reached.
@@ -170,8 +162,10 @@ sleep until the event has to take place, and
 yield the event.
 
 Example:
+
     for event in MidiFile("example.mid").play():
          .... process the event ...
+
 The play function will wait the necessary time between iterations
 so that each event is yielded on time to be processed.
 
@@ -185,7 +179,9 @@ Even so, since play uses the sleep_us function, sometimes
 you may get the event a bit later than the correct time.
 
 For Micropython, time.sleep_us() is used. For CPython time.sleep() is used.
-#### MidiFile play arameters
+
+#### MidiFile play parameters
+
 ###### track_number=None
 
 If track_number=None, and the MIDI file is format 0 or 1,
@@ -199,11 +195,11 @@ is intended for use with format type 2 files, to play a certain track. Format 2 
 
 ### buffer_size
 
-Return the buffer_size value. 0=tracks are buffered entirely in RAM.
-A number, for example buffer_size=100 means a buffer of 100 bytes is
-allocated per track to read the track data.
+Return the buffer_size value. A value of 0 means that the file is buffered entirely in RAM.
+This may be faster for playback, but needs as much RAM as the size of the file.
 
-This option allows to read large MIDI files efficiently on microcontrollers with small RAM.
+When specifying a buffer_size greater than zero, for example buffer_size=100, means that a buffer of 100 bytes is 
+allocated per track to read the track data. This option allows to read large MIDI files efficiently on microcontrollers with little RAM.
         
 ### filename
 
@@ -214,13 +210,16 @@ Return the file name of the MIDI file, with absolute path.
 Returns the MIDI format type as stored in the header of the MIDI file:
 * 0   single track MIDI file, should have only one track.
 To parse a type 0 file, use the MIdiFile object as iterator:
+
     for event in MidiFile("example.mid"):
         ...process each event
+
 * 1   multitrack MIDI file, can have many tracks. During playback, the tracks
 are merged into one ordered sequence of events.
 To parse a type 1 file, proceed as with a type 0 file.
 * 2   each track behaves like a format 0 single track MIDI file. Merging
 tracks is not allowed. Track number "n" can be  parsed as follows:
+
     for event in MidiFile("format2file.mid").tracks[n]:
          .... process event...
 
@@ -230,7 +229,7 @@ tracks is not allowed. Track number "n" can be  parsed as follows:
 Calculates and returns the length of the MidiFile in microseconds.
 
 Be aware that on a slow microcontroller, calculating the length of
-a large MIDI file might take a several of seconds.
+a large MIDI file might take a several seconds.
 This is due to the way MIDI files work, in order to
 get the playing length, this method needs to parse
 the entire file, compute and add the time differences of all events.
@@ -244,7 +243,7 @@ the tracks are not meant to be merged.
 ### miditicks_per_quarter
 
 Return the MIDI ticks per quarter note (also called pulses per beat)
-parameter of the MIDI header of the file.
+parameter of the MIDI file header.
         
         
 ### reuse_event_object
@@ -294,6 +293,7 @@ end_of_track, etc), delta time in midi ticks, delta time in microseconds,
 first few bytes of the raw data, and all properties
 that are allowed for the event type. For example, a "note on" event might
 be shown as:
+
 "note_on delta[miditicks]=10 delta[usec]=9500 note=60 velocity=64 channel=5"
 
 The order of the properties in the string may vary.
@@ -400,10 +400,13 @@ the reuse_event_object=True option in the MidiFile.
 
 Example 1: if you need a list of all MidiEvents
 in a file, then either use:
-    event_list = [ event for event in MidiFile("example.mid") ]
-or use:
+
     event_list = [event.copy for event in MidiFile("example.mid",
         reuse_event_object=True) ]
+
+or use:
+
+    event_list = [ event for event in MidiFile("example.mid") ]
         
 ### is_meta
 
@@ -544,7 +547,8 @@ For a meta event, this is the meta type, for example 0x2f for "end of track".
 Available for all possible events. For custom or proprietary meta events, this
 will be the meta type of that event.
 
-Examples:
+Example:
+
     if event.status == umidiparser.NOTE_OFF:
         .... process note off event ...
      elif event.status == umidiparser.KEY_SIGNATURE:
