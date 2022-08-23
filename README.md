@@ -8,7 +8,7 @@
 <td valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>umidiparser</strong></big></big></font></td
 ><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/hermannvonborries/Library/CloudStorage/GoogleDrive-hermannvb%40gmail.com/My%20Drive/cosas/micropython/umidiparser/umidiparser.py">/Users/hermannvonborries/Library/CloudStorage/GoogleDrive-hermannvb@gmail.com/My Drive/cosas/micropython/umidiparser/umidiparser.py</a></font></td></tr></table>
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br></font></td></tr></table>
     <p></p>
 <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
