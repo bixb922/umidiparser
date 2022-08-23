@@ -21,7 +21,7 @@ Example:
     import umidiparser
     import utime
     for event in umidiplay.MidiFile("example.mid"):
-        utime.sleep\_us( event.delta\_us )
+        utime.sleep_us( event.delta_us )
         if event.status == umidiplay.NOTE\_ON:
             ... start the note event.note on event.channel with event.velocity
         elif event.status == umidiplay.NOTE\_OFF :
@@ -60,7 +60,7 @@ The set tempo meta events and the "pulses per beat"
 field of the midi file header are used to calculate the time between events.
 The time is calculated as integer rounded to the nearest microsecond,
 because floating point processing may be slow on some microcontrollers.
-The Micropython function *utime.sleep\_us( event.delta\_us )* can be used to sleep between events.
+The Micropython function *utime.sleep_us( event.delta_us )* can be used to sleep between events.
 Set tempo events may be present in any track.
 
 Multitrack file type 1 files are supported, and tracks are automatically
@@ -225,7 +225,7 @@ tracks is not allowed. Track number "n" can be  parsed as follows:
          .... process event...
 
         
-### length\_us
+### length_us
 
 Calculates and returns the length of the MidiFile in microseconds.
 
@@ -275,9 +275,9 @@ For single track files, the time difference is with the previous event
 of the same track. When parsing multitrack files, tracks are merged and this
 time is set during playback to the time difference with the previous event in any track.
 
-### event.delta\_us
+### event.delta_us
 time in microseconds since the last event for this
-event to start. For example, you might use sleep\_us( event.delta\_us ) to
+event to start. For example, you might use sleep_us( event.delta_us ) to
 sleep the appropriate time for the event to start.
 
 ### event.data 
@@ -595,7 +595,7 @@ usually from 0 to 59.
 Returns the tempo (0 to 2**32 microseconds per quarter beat)
 for a SET_TEMPO meta event.
 This module interprets the tempo event before returning it, so
-the following events returned will have their delta\_us property
+the following events returned will have their delta_us property
 calculated with the new tempo value.
 
         
