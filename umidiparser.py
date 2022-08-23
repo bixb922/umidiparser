@@ -889,7 +889,7 @@ class MidiEvent:
         to_midi will raise AttributeError if the event is for MIDI meta messages, these
         occur in MIDI files and are not normally sent to MIDI controllers.
 
-        This function has not been tested.
+        This function has not been tested with a real MIDI device.
         """
         if self.is_meta():
             raise AttributeError
