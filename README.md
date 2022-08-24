@@ -20,23 +20,26 @@ Example:
     import umidiparser
     import utime
     for event in umidiplay.MidiFile("example.mid"):
+        # Wait until this event is due
         utime.sleep_us( event.delta_us )
-        if event.status == umidiplay.NOTE\_ON:
+        # Process the event according to type
+        if event.status == umidiplay.NOTE_ON:
             ... start the note event.note on event.channel with event.velocity
-        elif event.status == umidiplay.NOTE\_OFF :
+        elif event.status == umidiplay.NOTE_OFF :
             ... stop the note event.note stop to sound ...
-        elif event.status == umidiplay.PROGRAM\_CHANGE:
+        elif event.status == umidiplay.PROGRAM_CHANGE:
             ... change midi program to event.program on event.channel ....
         else:
+           # Show all events not processed
            print("other event", event )
 
 
 This module does not contain a sound synthesizer, only the capabilities to
 read and interpret a MIDI file.
 
-Memory and CPU usage is optimized for a microcontroller with limited resources and Micropython. 
-CPU usage can be lowered even more by reusing the same MidiEvent over and over
-during the process, using the same event object over and over again:
+Memory and CPU usage is optimized for a microcontroller with limited resources with Micropython. 
+CPU and memory usage can be lowered even more by reusing the same MidiEvent over and over
+during the process:
 
     for event in MidiFile("example.mid", reuse_event_object=True ):
         ... process event....
@@ -77,7 +80,7 @@ program.
 
 There are no capabilities to modify or create MIDI files.
 
-## CPU AND RAM USAGE
+## CPU AND MEMORY (RAM) USAGE
 Parsing on a ESP32 at 200 Mhz CPU clock with Micropython takes about
 one millisecond per event, and even less if you use the reuse_event_object
 of the MidiFile object.
