@@ -16,7 +16,7 @@ Copy umidiparser.py to your device.
 This module reads MIDI files and get all the MIDI events contained in the file.
 
 Example:
-
+.. code-block:: python
     import umidiparser
     import utime
     for event in umidiplay.MidiFile("example.mid"):
