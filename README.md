@@ -1,4 +1,4 @@
-# umidiparser - MIDI file parser for Micropython
+# umidiparser - MIDI file parser for Micropython (small, fast and complete)
 
 ## NAME
 umidiparser
