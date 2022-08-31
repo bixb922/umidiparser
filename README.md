@@ -1,22 +1,8 @@
-# umidiparser - MIDI file parser for Micropython (small, fast and complete)
-
-## NAME
-umidiparser
-
-## AUTHOR
-Hermann Paul von Borries
-
-## LICENSE
-MIT, Copyright (c) 2022 Hermann Paul von Borries
-
-## INSTALLATION
-Copy umidiparser.py to your device.
-
 ## DESCRIPTION
-This module reads MIDI files and get all the MIDI events contained in the file.
+umidiparser - This module reads (parses) MIDI files and returns the MIDI events contained in the file. It is optimized for Micropython on a microcontroller with limited resources.
 
 Example:
-.. code-block:: python
+
     import umidiparser
     import utime
     for event in umidiplay.MidiFile("example.mid"):
@@ -703,4 +689,15 @@ value property available for:  AFTERTOUCH, CONTROL_CHANGE, POLYTOUCH
 Returns the velocity for the event, usually 0-127.
 
 velocity property available for:  NOTE_OFF NOTE_ON
+
+## AUTHOR
+Hermann Paul von Borries
+
+## LICENSE
+MIT, Copyright (c) 2022 Hermann Paul von Borries
+
+## INSTALLATION
+Copy umidiparser.py to your device.
+
+
         
