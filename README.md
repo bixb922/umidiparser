@@ -313,7 +313,7 @@ List of MidiTrack objects, one for each track.
         
 # Class MidiEvent
 
-Represents a parsed MIDI event. You get MidiEvent objects iterating through a MidiFile.
+Represents a parsed MIDI event. You get MidiEvent objects iterating through a MidiFile. Some properties are available for all events, such as status and delta_us, others are only available for certain event types, such as velocity which is available for note on and note off.
 
 ## Properties available for all events
 
@@ -333,7 +333,41 @@ Example:
      elif event.status == umidiparser.KEY_SIGNATURE:
           ... process key signature meta event ...
 
+The values of status are available as constants, e.g. umidiparser.NOTE_ON
 
+Possible values are:
+* Channel messages
+- NOTE_OFF
+- NOTE_ON
+- POLYTOUCH
+- CONTROL_CHANGE
+- PROGRAM_CHANGE
+- AFTERTOUCH
+- PITCHWHEEL
+
+* Meta messages 
+- SEQUENCE_NUMBER
+- TEXT
+- COPYRIGHT
+- TRACK_NAME
+- INSTRUMENT_NAME
+- LYRICS
+- MARKER
+- CUE_MARKER
+- PROGRAM_NAME
+- DEVICE_NAME
+- CHANNEL_PREFIX
+- MIDI_PORT
+- END_OF_TRACK
+- SET_TEMPO
+- SMPTE_OFFSET
+- TIME_SIGNATURE
+- KEY_SIGNATURE
+- SEQUENCER_SPECIFIC
+
+ * Sysex/escape events
+ - SYSEX
+ - ESCAPE
 
 ### delta_us
 
@@ -611,40 +645,6 @@ Returns the program number 0-127 for a PROGRAM_CHANGE event.
 Returns the seconds for the SMPTE_OFFSET meta message,
 usually from 0 to 59.        
 
-* Channel messages
-- NOTE_OFF
-- NOTE_ON
-- POLYTOUCH
-- CONTROL_CHANGE
-- PROGRAM_CHANGE
-- AFTERTOUCH
-- PITCHWHEEL
-
-* Meta messages 
-- SEQUENCE_NUMBER
-- TEXT
-- COPYRIGHT
-- TRACK_NAME
-- INSTRUMENT_NAME
-- LYRICS
-- MARKER
-- CUE_MARKER
-- PROGRAM_NAME
-- DEVICE_NAME
-- CHANNEL_PREFIX
-- MIDI_PORT
-- END_OF_TRACK
-- SET_TEMPO
-- SMPTE_OFFSET
-- TIME_SIGNATURE
-- KEY_SIGNATURE
-- SEQUENCER_SPECIFIC
-
- * Sysex/escape events
- - SYSEX
- - ESCAPE
-
-## Meta event properties        
 ### sub_frames
 
 Returns the sub frames for the SMPTE_OFFSET meta message,
