@@ -1,7 +1,0 @@
-{
-  "urls": [
-    ["umidiparser/__init__.py", "github:org/bixb922/tree/master/src/__init__.py"],
-    ["mlx90640/utils.py",  "github:org/bixb922/tree/master/src/umidiparser.py"]
-  ],
-  "version": "1.2"
-}
