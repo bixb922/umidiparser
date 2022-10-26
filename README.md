@@ -5,7 +5,7 @@ This module reads MIDI files (SMF files) and gets all the MIDI events contained 
 
 Example:
 
-```
+```python
     import umidiparser
     import utime
     for event in umidiplay.MidiFile("example.mid").play():
