@@ -65,7 +65,7 @@ elif _implementation == "circuitpython":
     except:
         pass
     time_sleep_us = lambda usec: time.sleep( usec/1_000_000 )
-    ttime_now_us = lambda: (time.monotonic_ns()+500)//1_000
+    time_now_us = lambda: (time.monotonic_ns()+500)//1_000
     time_diff_us = lambda x, y: x - y
     asyncio_sleep_ms = lambda x: asyncio.sleep_ms( x )
 else:
