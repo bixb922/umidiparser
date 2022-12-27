@@ -46,6 +46,8 @@ import sys
 #   Added event.is_channel() to test for channel events
 #   Allow MidiFile.play() used in async for (with asyncio.sleep instead of sleep). Requires asyncio
 #   Play funcion computes event.timestamp_us for each event
+# Change log: v1.3
+#   For CircuitPython, it's import asyncio. Also time_now_us now returns an integer.
 
 # Compatibility wrapper for python/micropython/circuitpython functions
 _implementation = sys.implementation.name
@@ -59,11 +61,11 @@ if _implementation == "micropython":
 elif _implementation == "circuitpython":
     from micropython import const
     try:
-        import uasyncio as asyncio
+        import asyncio
     except:
         pass
     time_sleep_us = lambda usec: time.sleep( usec/1_000_000 )
-    time_now_us = lambda: time.monotonic_ns()/1_000
+    ttime_now_us = lambda: (time.monotonic_ns()+500)//1_000
     time_diff_us = lambda x, y: x - y
     asyncio_sleep_ms = lambda x: asyncio.sleep_ms( x )
 else:
