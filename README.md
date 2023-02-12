@@ -8,15 +8,15 @@ Example:
 ```python
     import umidiparser
     import utime
-    for event in umidiplay.MidiFile("example.mid").play():
+    for event in umidiparser.MidiFile("example.mid").play():
         # .play will sleep, avoiding time drift, before returning the event on time
         # Process the event according to type
-        if event.status == umidiplay.NOTE_ON:
+        if event.status == umidiparser.NOTE_ON:
             ... start the note with midi number event.note 
 		on channel event.channel with event.velocity
-        elif event.status == umidiplay.NOTE_OFF :
+        elif event.status == umidiparser.NOTE_OFF :
             ... stop the note event.note .
-        elif event.status == umidiplay.PROGRAM_CHANGE:
+        elif event.status == umidiparser.PROGRAM_CHANGE:
             ... change midi program to event.program on event.channel ....
         else:
            # Show all events not processed
