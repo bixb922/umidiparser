@@ -263,7 +263,7 @@ GM_CC={
 def _note_name( midi, note_list ):
     return note_list[ midi%12 ] + str( (midi//12) - 1 )
 
-def note_name_american( midi ):
+def note_name_english( midi ):
     '''
     Converts midi number (0-127) to american note name, e.g. midi 60 is a C4
     Please change the accidentals to what you need.
@@ -271,12 +271,20 @@ def note_name_american( midi ):
     note_list = ( "C", "Db", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B" )
     return _note_name( midi, note_list )
     
-def note_name_latin( midi ):
+def note_name_doremi( midi ):
     '''
-    Converts midi number (0-127) to latin note name, e.g. midi 60 is a Do4
+    Converts midi number (0-127) to doremi note name, e.g. midi 60 is a Do4
     Please change the accidentals to what you need.
     '''
     note_list = ( "Do", "Reb", "Re", "Mib", "Mi", "Fa", "Fa#", "Sol", "Lab", "La", "Sib", "Si" )
+    return _note_name( midi, note_list )
+
+def note_name_german( midi ):
+    '''
+    Converts midi number (21-127) to german note name, e.g. midi 60 is a C4
+    Please change the accidentals to what you need.
+    '''
+    note_list = ( "C", "Des", "D", "Es", "E", "F", "Fis", "G", "As", "A", "B", "H" )
     return _note_name( midi, note_list )
 
 def midi_to_frequency( midi, central=440 ):
@@ -309,9 +317,18 @@ def controller_name( control ):
     return GM_CC[control]
 
 if __name__ == "__main__":
-    print(f"{note_name_american(60)=} expected=C4")
-    print(f"{note_name_latin(60)=} expected=Do4")
+    print(f"{note_name_english(60)=} expected=C4")
+    print(f"{note_name_doremi(60)=} expected=Do4")
+    print(f"{note_name_german(60)=} expected=C4")
+    print(f"{note_name_english(0)=} expected C-1")
+    print(f"{note_name_english(127)=} expected G9")
     print(f"{midi_to_frequency(50)=:.2f} expected 146.83")
     print(f"{program_name(43)=} expected=Contrabass")
     print(f"{percussion_name(33)=} expected=Metronome Click")
     print(f"{controller_name(64)=} expected=Sustain Pedal")
+    for midi in range(60,73):
+        print(f"{midi} {note_name_english(midi)} "+
+            f"{note_name_doremi(midi)} "+
+            f"{note_name_german(midi)}")
+
+        
