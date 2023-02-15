@@ -4,7 +4,7 @@
 	 "github:bixb922/umidiparser/src/__init__.py"],
     ["umidiparser/umidiparser.py",
 	 "github:bixb922/umidiparser/src/umidiparser.py"]
-  ],
+  ], 
   "version": "1.3"
 }
 
