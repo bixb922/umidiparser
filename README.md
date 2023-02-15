@@ -44,10 +44,9 @@ This module will calculate the time between events, using the parameters and eve
 
 ## INSTALLATION
 
-You can install with `pip install umidiparser`
+Micropython: Install directly to your microcontroller with 'mpremote mip install github:bixb922/umidiparser'
 
-You can install the package in the microcontroller, or just copy the umidiparser.py file.
-
+Or else, get the __init__.py and umidiparser.py and copy to a umidiparser folder in any of the folders of sys.path
 
 ## MIDI FILE COMPATIBILITY
 The parser will parse MIDI files, also known as SMF files, with format type 0, 1 and 2. 
@@ -706,6 +705,11 @@ Returns the velocity for the event, usually 0-127.
 
 velocity property available for:  NOTE_OFF NOTE_ON
 
+## MIDI event values as text: gmfunctions.py
+This is a file with functions to convert Midi note numbers to note names in english notation (C, Db, D), doremi notation and german notation (C, Des, D). There are translations of program numbers, control changes and values according to the General Midi (GM) standard. There is also a function to convert midi note numbers to frequencies.
+
+Get file gmfunctions.py, this is not part of the umidiparser package. The file is rather large (7kb), you might want to edit and prune on your PC before loading in your microcontroller. Also, you might want to change the names of notes with accidentals (sharp vs. flat) in the code on your PC.
+
 ## Change log for version 1.1 and 1.2
 
 Added CircuitPython compatibility
@@ -717,6 +721,10 @@ Corrected possible error if playing open file again.
 Added event.is_channel() to test for channel events.
 Allow MidiFile.play() used in async for (with asyncio.sleep instead of sleep). Requires asyncio.
 Play funcion computes event.timestamp_us for each event
+
+## Change log for version 1.3
+Added support for installing with mpremote mip (Micropython). Corrected package name in README.md. Added gmfunctions.py in github. Fixed asyncio bug and typo for CircuitPython. 
+
 
 
 ## AUTHOR
