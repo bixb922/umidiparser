@@ -1,0 +1,8 @@
+{
+  "urls": [
+    ["umidiparser/__init__.py", "github:bixb922/umidiparser/blob/master/src/__init__.py"],
+    ["umidiparser/umidiparser.py", "github:bixb922/umidiparser/blob/master/src/umidiparser.py"]
+  ],
+  "version": "1.3"
+}
+
