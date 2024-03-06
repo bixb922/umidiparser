@@ -43,10 +43,11 @@ If there is enough RAM available to buffer the complete file, you can use `for e
 This module will calculate the time between events, using the parameters and events available in the MIDI file (pulses per beat field in the file header and set tempo events).
 
 ## INSTALLATION
+CPython (regular Python): ```pip install umidiparser```
 
-Micropython: Install directly to your microcontroller with 'mpremote mip install github:bixb922/umidiparser'
+Micropython: Install directly to your microcontroller with ```mpremote mip install github:bixb922/umidiparser```
 
-Or else, get the __init__.py and umidiparser.py and copy to a umidiparser folder in any of the folders of sys.path
+Or else, get the files \_\_init\_\_.py and umidiparser.py and copy to a umidiparser folder in any of the folders of sys.path
 
 ## MIDI FILE COMPATIBILITY
 The parser will parse MIDI files, also known as SMF files, with format type 0, 1 and 2. 
