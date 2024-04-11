@@ -26,7 +26,7 @@ Example:
 This module does not contain a sound synthesizer, only the capabilities to
 read and interpret a MIDI file.
 
-Memory and CPU usage are optimized for a microcontroller with limited resources with Micropython or CircuitPython.
+Memory and CPU usage are optimized for a microcontroller with limited resources with Micropython or CircuitPython. On CPython this module is very fast.
 
 CPU and memory usage can be lowered even more by reusing the same MidiEvent over and over
 during the process:
@@ -47,7 +47,18 @@ CPython (regular Python): ```pip install umidiparser```
 
 Micropython: Install directly to your microcontroller with ```mpremote mip install github:bixb922/umidiparser```
 
-Or else, get the files \_\_init\_\_.py and umidiparser.py and copy to a umidiparser folder in any of the folders of sys.path
+CircuitPython: get umidiparser.py and copy it to the /lib folder of the microcontroller.
+
+*Important notice for CircuitPython*
+
+On many boards, the @micropython.native decorator is disabled, and you will get the following error message: ```SyntaxError: invalid micropython decorator```. If that is the case, please edit your copy of umidiparser.py and comment or delete all ```@micropython.native``` statements. This decorator speeds up execution, but there is no functional difference without this decorator. ```umidiparser``` is quite fast without the decorator. 
+
+*Important notice for MicroPython*
+
+If you use ```mpremote mount``` and the MIDI files are accessed on the PC, you will get the following error message: ```AttributeError: 'RemoteFile' object has no attribute 'tell'```. You have two options:
+* You can open the MIDI file with ```umidiparser.MidiFile("mymidi.mid", buffer_size=0)```. This will avoid tell/seek operations, but the file will be read entirely to memory.
+* Copy the MIDI files to flash, and read them from flash. While ```mpremote mount``` is active, the PC's file system is at ```/remote``` and this is the default directory, but the flash is still avaiable at ```/```, so opening files with a relative path will open files on the PC, while opening files with an absolute path (starting with ```/```) will read files on flash.
+
 
 ## MIDI FILE COMPATIBILITY
 The parser will parse MIDI files, also known as SMF files, with format type 0, 1 and 2. 
