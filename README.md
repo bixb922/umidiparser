@@ -5,7 +5,7 @@ This module reads MIDI files (SMF files) and gets all the MIDI events contained 
 
 Example:
 
-```python
+```py
     import umidiparser
     import utime
     for event in umidiparser.MidiFile("example.mid").play():
@@ -30,10 +30,10 @@ Memory and CPU usage are optimized for a microcontroller with limited resources 
 
 CPU and memory usage can be lowered even more by reusing the same MidiEvent over and over
 during the process:
-
+```py
     for event in MidiFile("example.mid", reuse_event_object=True ):
         ... process event....
-
+```
 Normally, only a small portion of the file will be buffered in memory. The default is 100 bytes per track.
 This allows to process a files
 much larger than the available heap or RAM. See "CPU AND MEMORY" below.
@@ -120,8 +120,9 @@ Imports *sys* to get sys.name.implementation.
 
 # Class MidiFile
 
-`mf = MidiFile( filename, buffer_size=100, reuse_event_object=false)`
-
+```py
+mf = MidiFile( filename, buffer_size=100, reuse_event_object=false)`
+```
 Parses a MIDI file, returning an iterator over the MIDI events in the file. You then can iterate through the events of the file, see the iterator and the *play* method.
 
 It is also possible to get the tracks using the mf.track[] list and iterate through the events of one track only, useful for format type 2 files.
@@ -160,18 +161,18 @@ The default value for *buffer_size* is 100 bytes.
 
 With the default value of False, for each step of the iteration a new MidiEvent is returned.
 If you do:
-
-            for event in MidiFile("example.mid"):
-                ... process each event ...
-
+```py
+    for event in MidiFile("example.mid"):
+        ... process each event ...
+```
 then each iteration of the loop will yield a new MidiEvent object.
 This is the normal and expected behavior for Python iterators.
 
 However, if you if you have little RAM or need higher processing speed use:
-
+```py
     for event in MidiFile("example.mid", reuse_event_object=True):
          ... process each event ....
-
+```
 In this case, for each iteration of the loop, the same MidiEvent object is returned over over and over 
 for each step of the loop, but overwritten with the new data. However, if you want to store an event
 for later use,  you'll have to make a deep copy using `event.copy`.
@@ -195,11 +196,11 @@ Chunks after the header that are not tracks identified with the MTrk header are 
 
 To get all the events of a format type 0 or format type 1 MIDI file,
 iterate through the MidiFile object, for example:
-    
+```py    
     import umidiparser
     for event in MidiFile("example.mid"):
         print(event)
-
+```
 
 Events will be returned in ascending order in time. For format type 1
 multitrack files, all tracks are merged.
@@ -232,10 +233,10 @@ sleep until the event has to take place, and
 yield the event.
 
 Example:
-
+```py
     for event in MidiFile("example.mid").play():
          .... process the event ...
-
+```
 The play function will wait the necessary time between iterations
 so that each event is yielded on time to be processed.
 
@@ -251,11 +252,11 @@ you may get the event a bit later than the correct time.
 For Micropython, *time.sleep_us()* is used. For CircuitPython and CPython *time.sleep()* is used. 
 
 There is also a asyncio version of MidiFile.play() available:
-
-	async for event in MidiFile("example.mid").play():
-		... process the event ...
-
-This will work exactly like the normal for, except it will pause for the next event with *await asyncio.sleep()* for CPython or *asyncio.sleep_ms()* for MicroPython an CircuitPython. 
+```py
+    async for event in MidiFile("example.mid").play():
+        ... process the event ...
+```
+This will work exactly like the normal for, except it will pause for the next event with *await*, yielding control back to the asyncio loop. 
 
 ### length_us
 
@@ -292,26 +293,24 @@ Returns the file name of the MIDI file.
 Returns the MIDI format type as stored in the header of the MIDI file:
 
 * format_type 0 files are single track MIDI files.
-To parse a type 0 file, use the MIdiFile object as iterator:
-
+To parse a type 0 or type 1 file, use the MidiFile object as iterator. If the file is multitrack, this module will merge all tracks, and yield events in ascending time order:
+```py
     for event in MidiFile("example.mid"):
         ...process each event
-
-* format_type 1 files are multitrack MIDI files. During playback, this module will merge the tracks
-into an ordered sequence of events.
-
-To parse a type 1 file, use the same code as with a type 0 file. 
+```
 
 * format_type 2 files are multitrack files where each track behaves like a format 0 single track MIDI file. Merging
 tracks is not allowed. Track number "n" can be  parsed as follows:
-
+```py
     for event in MidiFile("format2file.mid").tracks[n]:
          .... process event...
-
+```
 Or also:
-
+```py
     For event in MidiFile("format2file.mid").tracks[n].play():
          .... process event...
+```
+In fact, you could use the same methods on type 0 and type 1 files to access each track separately.
 
         
 ### miditicks_per_quarter
@@ -349,12 +348,12 @@ umidiparser.PROGRAM_CHANGE, umidiparser.LYRICS, umidiparser.SYSEX, etc.
 Available for all events types. 
 
 Example:
-
+```py
     if event.status == umidiparser.NOTE_OFF:
-        .... process note off event ...
-     elif event.status == umidiparser.KEY_SIGNATURE:
-          ... process key signature meta event ...
-
+        ... process note off event ...
+    elif event.status == umidiparser.KEY_SIGNATURE:
+        ... process key signature meta event ...
+```
 Possible values are constants in umidiparser:
 * Channel messages
 - NOTE_OFF
@@ -512,14 +511,14 @@ the reuse_event_object=True option in the MidiFile.
 
 Example 1: if you need a list of all MidiEvents
 in a file, then either use:
-
+```py
     event_list = [event.copy for event in MidiFile("example.mid",
         reuse_event_object=True) ]
-
+```
 or use:
-
+```py
     event_list = [ event for event in MidiFile("example.mid") ]
-        
+```        
 ### is_channel()
 
 Returns True if this is a channel event such as note on, program change
@@ -537,10 +536,10 @@ or a Sysex or Escape event.
 
 ### str(event) 
 Will translate the event information to a string, for example:
-
+```py
     print(event)    
     event_as_a_string = str(event)
-
+```
 Returns a string with a description of the MidiEvent, starting
 with the event name in lowercase (note_on, note_off, pitchwheel, set_tempo,
 end_of_track, etc), delta time in MIDI ticks, delta time in microseconds,
@@ -737,6 +736,8 @@ Play funcion computes event.timestamp_us for each event
 ## Change log for version 1.3
 Added support for installing with mpremote mip (Micropython). Corrected package name in README.md. Added gmfunctions.py in github. Fixed asyncio bug and typo for CircuitPython. 
 
+## After version 1.3
+Updated readme with restrictions. Improved code formatting.
 
 
 ## AUTHOR
