@@ -5,12 +5,13 @@
 2.  [Parts list](#2-parts-list)
 3.  [MIDI over serial line DIN connector](#3-midi-over-serial-line-din-connector)
 4.  [Circuit](#4-circuit)
-5.  [The receiving end](#5-the-receiving-end)
-6.  [The program](#6-the-program)
+5.  [The program](#5-the-program)
+6.  [The receiving end](#6-the-receiving-end)
 7.  [Some tinkering](#7-some-tinkering)
 8.  [Other stuff](#8-other-stuff)
 9.  [Troubleshooting](#9-troubleshooting)
-10.  [Links](#10-links)
+10.  [Is this possible on a RP2040?](#10-is-this-possible-on-a-rp2040)
+11.  [Links](#11-links)
 # 1. Overview
 
 MIDI data can be sent over a serial connection. This is done with 5 pin DIN connectors:
@@ -50,18 +51,8 @@ No additional buffer, driver or voltage shifter is needed. The ESP32 GPIO pin su
 
 Pins 1, 5 and 2 of the MIDI plug are not connected. Pin 2 and shielding is needed if cables are long, see the MIDI standard (link below).
 
-# 5. The receiving end
 
-This is the receiving end of the circuit (i.e. what's behind a ```MIDI in```plug)
-
-![receiving circuit](receiving.png)
-
-There is always Rb, a 220 Ohm resistor on the receiving end to limit current. The diode D1 kicks in when pin 4 and 2 are accidentally reversed to protect the LED. The current drives LED1 in a optocoupler. The purpose of the optocoupler is to isolate this circuit electrically from the rest of the receiver. The optocouplers are normally 6N138, 6N139, PC-900V or H11L1 integrated circuits.
-
-When LED1 has a current of around 5 mA, it will act on a photosensitive device that then switches a current on and off.
-
-
-# 6. The program
+# 5. The program
 
 To play back a MIDI file, use this MicroPython code on the ESP32. For the example, the MIDI file needs to be on the root of the ESP32's file system.
 ```
@@ -75,6 +66,18 @@ for event in MidiFile("my_midi_file.mid").play():
         uart.write( event.to_midi() )
 ```
 Don't use UART0, it is reserved for the REPL. See the MicroPython docs for the default pins for UART 1 and 2, but you can select the pin you need. For MIDI out, the rx pin is not used but is it reserved anyhow.
+
+
+# 6. The receiving end
+
+This is the receiving end of the circuit (i.e. what's behind a ```MIDI in```plug)
+
+![receiving circuit](receiving.png)
+
+There is always Rb, a 220 Ohm resistor on the receiving end to limit current. The diode D1 kicks in when pin 4 and 2 are accidentally reversed to protect the LED. The current drives LED1 in a optocoupler. The purpose of the optocoupler is to isolate this circuit electrically from the rest of the receiver. The optocouplers are normally 6N138, 6N139, PC-900V or H11L1 integrated circuits.
+
+When LED1 has a current of around 5 mA, it will act on a photosensitive device that then switches a current on and off.
+
 
 
 # 7. Some tinkering
@@ -127,6 +130,7 @@ Wiring goes from pin 10 to the blue 100 Ohm resistor, then to pin 4 (orange) of 
 
 So now the sound module is playing back a nice march! (One of my crank organ MIDI files) &#x1F603;&#x1F603;&#x1F603;
 
+Just for completeness: when the signal is logical 1, the GPIO pin shows a voltage of 3.25V. The current will be always lower than (3.3-3.25)/220=0.2mA and this will switch the optocoupler off.
 
 # 8. Other stuff
 
@@ -171,7 +175,21 @@ To measure the current that is flowing, you can measure the voltage at R1 and di
 
 The voltage between the output pin and ground (GND) should switch between about 3.25V and 0.15V.
 
-# 10. Links
+# 10. Is this possible on a RP2040?
+
+I haven't tried it. The RP2040 has a maximum current of 4mA per pin, and here 5mA are needed, so the current must be limited with higher resistances.
+
+This article shows how to set the RP2040 to a higher current, similar to the drive= parameter on the ESP32 pins:
+
+https://www.reddit.com/r/raspberrypipico/comments/10zbe89/micropython_drive_strength_for_gpio/
+
+That post says that "the pad control registers start at 0x4001c000 and can be manipulated using mem32. See page 299 in the datasheet. The following sets pin 16 to 12ma drive: ```mem32[0x4001c044] = mem32[0x4001c044] | 0b0110000```
+
+With a drive current of 12ma (the maximum), it should be possible to make the circuit work.
+
+If you are interested on MIDI output for the RP2040, post an issue here on this repository.
+
+# 11. Links
 
 This 2014 update of the standard describes in detail how to connect a 3.3V output to MIDI:
 
