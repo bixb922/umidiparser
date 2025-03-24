@@ -41,16 +41,6 @@ No additional buffer, driver or voltage shifter is needed. The ESP32 GPIO pin su
 
 Pins 1, 5 and 2 of the MIDI plug are not connected. Pin 2 and shielding is needed if cables are long, see the MIDI standard (link below).
 
-# The receiving end
-
-This is the receiving end of the circuit (i.e. what's behind a ```MIDI in```plug)
-
-![receiving circuit](receiving.png)
-
-There is always Rb, a 220 Ohm resistor on the receiving end to limit current. The diode D1 kicks in when pin 4 and 2 are accidentally reversed to protect the LED. The current drives LED1 in a optocoupler. The purpose of the optocoupler is to isolate this circuit electrically from the rest of the receiver. The optocouplers are normally 6N138, 6N139, PC-900V or H11L1 integrated circuits.
-
-When LED1 has a current of around 5 mA, it will act on a photosensitive device that then switches a current on and off.
-
 
 # The program
 
@@ -66,6 +56,18 @@ for event in MidiFile("my_midi_file.mid").play():
         uart.write( event.to_midi() )
 ```
 Don't use UART0, it is reserved for the REPL. See the MicroPython docs for the default pins for UART 1 and 2, but you can select the pin you need. For MIDI out, the rx pin is not used but is it reserved anyhow.
+
+
+# The receiving end
+
+This is the receiving end of the circuit (i.e. what's behind a ```MIDI in```plug)
+
+![receiving circuit](receiving.png)
+
+There is always Rb, a 220 Ohm resistor on the receiving end to limit current. The diode D1 kicks in when pin 4 and 2 are accidentally reversed to protect the LED. The current drives LED1 in a optocoupler. The purpose of the optocoupler is to isolate this circuit electrically from the rest of the receiver. The optocouplers are normally 6N138, 6N139, PC-900V or H11L1 integrated circuits.
+
+When LED1 has a current of around 5 mA, it will act on a photosensitive device that then switches a current on and off.
+
 
 
 # Some tinkering
@@ -118,6 +120,7 @@ Wiring goes from pin 10 to the blue 100 Ohm resistor, then to pin 4 (orange) of 
 
 So now the sound module is playing back a nice march! (One of my crank organ MIDI files) &#x1F603;&#x1F603;&#x1F603;
 
+Just for completeness: when the signal is logical 1, the GPIO pin shows a voltage of 3.25V. The current will be always lower than (3.3-3.25)/220=0.2mA and this will switch the optocoupler off.
 
 # Other stuff
 
