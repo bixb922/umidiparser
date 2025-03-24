@@ -165,6 +165,20 @@ To measure the current that is flowing, you can measure the voltage at R1 and di
 
 The voltage between the output pin and ground (GND) should switch between about 3.25V and 0.15V.
 
+# Is this possible on a RP2040?
+
+I haven't tried it. The RP2040 has a maximum current of 4mA per pin, and here 5mA are needed, so the current must be limited with higher resistances.
+
+This article shows how to set the RP2040 to a higher current, similar to the drive= parameter on the ESP32 pins:
+
+https://www.reddit.com/r/raspberrypipico/comments/10zbe89/micropython_drive_strength_for_gpio/
+
+That post says that "the pad control registers start at 0x4001c000 and can be manipulated using mem32. See page 299 in the datasheet. The following sets pin 16 to 12ma drive: ```mem32[0x4001c044] = mem32[0x4001c044] | 0b0110000```
+
+With a drive current of 12ma (the maximum), it should be possible to make the circuit work.
+
+If you are interested on MIDI output for the RP2040, post an issue here on this repository.
+
 # Links
 
 This 2014 update of the standard describes in detail how to connect a 3.3V output to MIDI:
