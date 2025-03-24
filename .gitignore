@@ -4,3 +4,4 @@ midi_schematics/*
 uart-midi.py
 .DS_Store
  midi_over_serial/ESP32_midi_output.xlsx
+ *editable*

@@ -1,80 +1,9 @@
 # umidiparser - low footprint MIDI file parser for Micropython, CircuitPython and Python
 
 # Contents
-1.  [Overview](#1-overview)
-     * [DESCRIPTION](#description)
-     * [INSTALLATION](#installation)
-     * [NEW: MIDI OUT OVER SERIAL](#new-midi-out-over-serial)
-     * [MIDI FILE COMPATIBILITY](#midi-file-compatibility)
-     * [CPU AND MEMORY (RAM) USAGE](#cpu-and-memory-ram-usage)
-     * [PORTABILITY](#portability)
-     * [CLASSES](#classes)
-     * [DEPENDENCIES](#dependencies)
-2.  [Class MidiFile](#2-class-midifile)
-     * [MidiFile constructor parameters](#midifile-constructor-parameters)
-         * [filename](#filename)
-         * [buffer_size=100](#buffer-size100)
-     * [MidiFile Methods](#midifile-methods)
-         * [Iterating through the events of a MIDI file](#iterating-through-the-events-of-a-midi-file)
-         * [play](#play)
-         * [length_us](#length-us)
-     * [MidiFile properties](#midifile-properties)
-         * [buffer_size](#buffer-size)
-         * [filename](#filename)
-         * [format_type](#format-type)
-         * [miditicks_per_quarter](#miditicks-per-quarter)
-         * [reuse_event_object](#reuse-event-object)
-     * [MidiFile instance variables](#midifile-instance-variables)
-         * [tracks](#tracks)
-3.  [Class MidiTrack](#3-class-miditrack)
-     * [Methods](#methods)
-4.  [Class MidiEvent](#4-class-midievent)
-     * [Properties available for all events](#properties-available-for-all-events)
-         * [status](#status)
-         * [delta_us](#delta-us)
-         * [delta_miditicks](#delta-miditicks)
-         * [data](#data)
-     * [Event specific properties](#event-specific-properties)
-     * [MIDI channel event specific properties](#midi-channel-event-specific-properties)
-     * [Meta and Sysex event specific properties](#meta-and-sysex-event-specific-properties)
-     * [MidiEvent methods](#midievent-methods)
-         * [copy()](#copy)
-         * [is_channel()](#is-channel)
-         * [is_meta()](#is-meta)
-         * [str(event)](#str-event)
-     * [MidiEvent properties](#midievent-properties)
-         * [channel](#channel)
-         * [clocks_per_click](#clocks-per-click)
-         * [control](#control)
-         * [data](#data)
-         * [denominator](#denominator)
-         * [frame_rate](#frame-rate)
-         * [frames](#frames)
-         * [hours](#hours)
-         * [key](#key)
-         * [minutes](#minutes)
-         * [name](#name)
-         * [notated_32nd_notes_per_beat](#notated-32nd-notes-per-beat)
-         * [note](#note)
-         * [number](#number)
-         * [numerator](#numerator)
-         * [pitch](#pitch)
-         * [port](#port)
-         * [program](#program)
-         * [seconds](#seconds)
-         * [sub_frames](#sub-frames)
-         * [tempo](#tempo)
-         * [text](#text)
-         * [to_midi](#to-midi)
-         * [value](#value)
-         * [velocity](#velocity)
-     * [MIDI event values as text: gmfunctions.py](#midi-event-values-as-text-gmfunctionspy)
-     * [Change log for version 1.1 and 1.2](#change-log-for-version-11-and-12)
-     * [Change log for version 1.3](#change-log-for-version-13)
-     * [After version 1.3](#after-version-13)
-     * [AUTHOR](#author)
-     * [LICENSE](#license)
-# 1. Overview
+
+
+# Overview
 
 ## DESCRIPTION
 This module reads MIDI files (SMF files) and gets all the MIDI events contained in the file. It also can return each event at the corresponding time.
@@ -197,7 +126,7 @@ Imports *asyncio* for async version of MidiFile.play()
 Imports *sys* to get sys.name.implementation.
 
 
-# 2. Class MidiFile
+# Class MidiFile
 
 ```py
 mf = MidiFile( filename, buffer_size=100, reuse_event_object=false)`
@@ -405,13 +334,13 @@ Return the value of the reuse_event_object property.
 ### tracks
 List of MidiTrack objects, one for each track.
 
-# 3. Class MidiTrack
+# Class MidiTrack
 The MidiFile object exposes the list of tracks.
 
 ## Methods
 
 
-# 4. Class MidiEvent
+# Class MidiEvent
 
 Represents a parsed MIDI event. You get MidiEvent objects iterating through a MidiFile.
 
@@ -482,7 +411,7 @@ For single track files, the time difference is with the previous event
 of the same track. When parsing multitrack files, tracks are merged and this
 time is set during playback to the time difference with the previous event, which may or may not be in the same track.
 
-### data
+### data 
 Contains the raw event data.
 
 
@@ -613,7 +542,7 @@ lyrics, set tempo or key signature.
 Returns False if this is a MIDI channel event,
 or a Sysex or Escape event.
 
-### str(event)
+### str(event) 
 Will translate the event information to a string, for example:
 ```py
     print(event)    

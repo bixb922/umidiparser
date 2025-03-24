@@ -1,17 +1,8 @@
 # MIDI over serial output with ESP32 and MicroPython
 
 # Contents
-1.  [Overview](#1-overview)
-2.  [Parts list](#2-parts-list)
-3.  [MIDI over serial line DIN connector](#3-midi-over-serial-line-din-connector)
-4.  [Circuit](#4-circuit)
-5.  [The receiving end](#5-the-receiving-end)
-6.  [The program](#6-the-program)
-7.  [Some tinkering](#7-some-tinkering)
-8.  [Other stuff](#8-other-stuff)
-9.  [Troubleshooting](#9-troubleshooting)
-10.  [Links](#10-links)
-# 1. Overview
+
+# Overview
 
 MIDI data can be sent over a serial connection. This is done with 5 pin DIN connectors:
 
@@ -21,7 +12,7 @@ This document explains how to play MIDI files on a ESP32 and drive a sound modul
 
 All this is valid at least for the ESP32 and the ESP32-S3.
 
-# 2. Parts list
+# Parts list
 
 * One 33 Ohm resistor
 * One 10 Ohm resistor
@@ -30,7 +21,7 @@ All this is valid at least for the ESP32 and the ESP32-S3.
 You also can connect the ESP32 to a female connector and use a 5 pin DIN male to male cable to connect to the sound module.
 
 
-# 3. MIDI over serial line DIN connector
+# MIDI over serial line DIN connector
 
 The MIDI signal over a DIN connector needs no current (0 mA) for a logical 1 and 5 mA for a logical 0.
 
@@ -38,7 +29,7 @@ Since the serial protocol is normally on (i.e. transmitting logical 1), while id
 
 The signal is transmitted through pins 2 and 4 of the 5 pin DIN connector. This is valid both for male and female connectors.
 
-# 4. Circuit
+# Circuit
 
 The circuit to connect to MIDI out is this:
 
@@ -50,7 +41,7 @@ No additional buffer, driver or voltage shifter is needed. The ESP32 GPIO pin su
 
 Pins 1, 5 and 2 of the MIDI plug are not connected. Pin 2 and shielding is needed if cables are long, see the MIDI standard (link below).
 
-# 5. The receiving end
+# The receiving end
 
 This is the receiving end of the circuit (i.e. what's behind a ```MIDI in```plug)
 
@@ -61,7 +52,7 @@ There is always Rb, a 220 Ohm resistor on the receiving end to limit current. Th
 When LED1 has a current of around 5 mA, it will act on a photosensitive device that then switches a current on and off.
 
 
-# 6. The program
+# The program
 
 To play back a MIDI file, use this MicroPython code on the ESP32. For the example, the MIDI file needs to be on the root of the ESP32's file system.
 ```
@@ -77,7 +68,7 @@ for event in MidiFile("my_midi_file.mid").play():
 Don't use UART0, it is reserved for the REPL. See the MicroPython docs for the default pins for UART 1 and 2, but you can select the pin you need. For MIDI out, the rx pin is not used but is it reserved anyhow.
 
 
-# 7. Some tinkering
+# Some tinkering
 
 The ESP32 pins allow to set the drive strength:
 
@@ -128,7 +119,7 @@ Wiring goes from pin 10 to the blue 100 Ohm resistor, then to pin 4 (orange) of 
 So now the sound module is playing back a nice march! (One of my crank organ MIDI files) &#x1F603;&#x1F603;&#x1F603;
 
 
-# 8. Other stuff
+# Other stuff
 
 MIDI connections are designed to be very sturdy and to resist a lot of abuse. On stage, but also in a studio, many bad things can happen...
 
@@ -146,7 +137,7 @@ These situations should be avoided:
 The ESP32 pins also have a open drain mode, but I think there is no important advantage in using this mode.
 
 
-# 9. Troubleshooting
+# Troubleshooting
 
 * Make sure pin 4 and 2 are not reversed
 * Check all connections again
@@ -171,7 +162,7 @@ To measure the current that is flowing, you can measure the voltage at R1 and di
 
 The voltage between the output pin and ground (GND) should switch between about 3.25V and 0.15V.
 
-# 10. Links
+# Links
 
 This 2014 update of the standard describes in detail how to connect a 3.3V output to MIDI:
 
@@ -188,4 +179,4 @@ https://docs.micropython.org/en/latest/esp32/quickref.html
 
 ESP32 technical reference manual, see  section "Peripheral output via GPIO Matrix":
 
-https://www.espressif.com/sites/default/files/documentation/esp32_technical_reference_manual_en.pd
+https://www.espressif.com/sites/default/files/documentation/esp32_technical_reference_manual_en.pdf
