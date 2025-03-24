@@ -177,7 +177,7 @@ That post says that "the pad control registers start at 0x4001c000 and can be ma
 
 With a drive current of 12ma (the maximum), it should be possible to make the circuit work.
 
-If you are interested on MIDI output for the RP2040, post an issue here on this repository.
+If you are interested in this topic, post a issue in this repository.
 
 # Links
 
