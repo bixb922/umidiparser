@@ -59,6 +59,9 @@ If you use ```mpremote mount``` and the MIDI files are accessed on the PC, you w
 * You can open the MIDI file with ```umidiparser.MidiFile("mymidi.mid", buffer_size=0)```. This will avoid tell/seek operations, but the file will be read entirely to memory.
 * Copy the MIDI files to flash, and read them from flash. While ```mpremote mount``` is active, the PC's file system is at ```/remote``` and this is the default directory, but the flash is still avaiable at ```/```, so opening files with a relative path will open files on the PC, while opening files with an absolute path (starting with ```/```) will read files on flash.
 
+## MIDI OUT OVER SERIAL
+
+Newly added: here is a description on how to play MIDI files to a sound module over a MIDI serial (5 pin DIN) connection: [midi over serial](midi_over_serial/midi_over_serial.md)
 
 ## MIDI FILE COMPATIBILITY
 The parser will parse MIDI files, also known as SMF files, with format type 0, 1 and 2. 
