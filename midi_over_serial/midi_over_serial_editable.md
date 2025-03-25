@@ -175,7 +175,7 @@ https://www.reddit.com/r/raspberrypipico/comments/10zbe89/micropython_drive_stre
 
 That post says that "the pad control registers start at 0x4001c000 and can be manipulated using mem32. See page 299 in the datasheet. The following sets pin 16 to 12ma drive: ```mem32[0x4001c044] = mem32[0x4001c044] | 0b0110000```
 
-With a drive current of 12ma (the maximum), it should be possible to make the circuit work.
+With a drive current of 8ma or 12ma, it should be possible to make the circuit work.
 
 If you are interested in this topic, post a issue in this repository.
 
@@ -197,3 +197,7 @@ https://docs.micropython.org/en/latest/esp32/quickref.html
 ESP32 technical reference manual, see  section "Peripheral output via GPIO Matrix":
 
 https://www.espressif.com/sites/default/files/documentation/esp32_technical_reference_manual_en.pdf
+
+Datasheet of the Raspberry Pi Pico, see "2.19.6.3. Pad Control - User Bank"
+
+https://datasheets.raspberrypi.com/rp2040/rp2040-datasheet.pdf
