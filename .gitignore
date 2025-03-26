@@ -1,9 +1,8 @@
 Midi*.pdf
 midi_schematics
 midi_schematics/*
-uart-midi.py
 .DS_Store
-midi_over_serial/ESP32_midi_output.xlsx
 README_editable.md
 midi_over_serial/midi_over_serial_editable.md
- 
+midi_over_serial/ESP32_midi_output.xlsx
+midi_over_serial/*.pdf
