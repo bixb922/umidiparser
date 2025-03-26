@@ -25,7 +25,7 @@ def test_voltage_levels():
 
 # Uncomment this line if you want to do level tests.
 # Comment this line if you want to play a MIDI file.     
-test_voltage_levels()
+#test_voltage_levels()
 
 # To invert the signal add: invert=UART.INV_TX
 uart = UART( 1, baudrate=baudrate, tx=txpin, rx=rxpin)
