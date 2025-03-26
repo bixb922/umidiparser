@@ -149,6 +149,10 @@ I tested this circuit also on my Nord Stage keyboard, no problem. No special set
 
 Just for completeness: when the signal is logical 1, the GPIO pin outputs a voltage of 3.3V minus about 3mV. The measured current is nearly zero, so LED1 will produce no light and the optocoupler will be turned off. 
 
+## Open drain
+
+The MIDI standard hints at open collector or open drain drivers, but does not mandate them. I measured the circuit with the Pin.OPEN_DRAIN mode, and there is no advantage in using open drain output with the ESP32.
+
 # Can I burn or damage the ESP32 or the receiver?
 
 MIDI connections are designed to be very sturdy and to resist a lot of abuse. On stage, but also in a studio, many bad things can happen...

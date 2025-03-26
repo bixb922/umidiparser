@@ -11,6 +11,7 @@
      * [ESP32 GPIO pin drive strength](#esp32-gpio-pin-drive-strength)
      * [Testing](#testing)
      * [And what happens with a logical 0?](#and-what-happens-with-a-logical-0)
+     * [Open drain](#open-drain)
 8.  [Can I burn or damage the ESP32 or the receiver?](#8-can-i-burn-or-damage-the-esp32-or-the-receiver)
 9.  [Troubleshooting](#9-troubleshooting)
 10.  [Is this possible on a RP2040?](#10-is-this-possible-on-a-rp2040)
@@ -168,6 +169,10 @@ I tested this circuit also on my Nord Stage keyboard, no problem. No special set
 ## And what happens with a logical 0?
 
 Just for completeness: when the signal is logical 1, the GPIO pin outputs a voltage of 3.3V minus about 3mV. The measured current is nearly zero, so LED1 will produce no light and the optocoupler will be turned off. 
+
+## Open drain
+
+The MIDI standard hints at open collector or open drain drivers, but does not mandate them. I measured the circuit with the Pin.OPEN_DRAIN mode, and there is no advantage in using open drain output with the ESP32.
 
 # 8. Can I burn or damage the ESP32 or the receiver?
 
