@@ -137,7 +137,7 @@ If you use ```mpremote mount``` and the MIDI files are accessed on the PC, you w
 
 ## NEW: MIDI OUT OVER SERIAL
 
-Newly added: here is a description on how to play MIDI files to a sound module over a MIDI serial (5 pin DIN) connection: [midi over serial](midi_over_serial/midi_over_serial.md)
+Newly added: here is a description on how to play MIDI files to a sound module over a MIDI serial (5 pin DIN) connection: [MIDIMIDI over serial output with ESP32 and MicroPython](midi_over_serial/midi_over_serial.md)
 
 ## MIDI FILE COMPATIBILITY
 The parser will parse MIDI files, also known as SMF files, with format type 0, 1 and 2. 
