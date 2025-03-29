@@ -248,7 +248,7 @@ class MidiParser:
         self._buffer2 = memoryview(bytearray(2))
 
 
-    def parse_events( self ):
+    def parse_events( self, track_number ):
         # This generator will parse the midi_data iterable
         # and yield MidiEvent objects until end of data (i.e. this
         # function is in itself a generator for events)
@@ -278,7 +278,7 @@ class MidiParser:
                 event_status, data = self._parse_message(  )
 
                 # Set the event with new data
-                event._set( event_status, data, delta )
+                event._set( event_status, data, delta, track_number )
 
                 yield event
 
@@ -448,9 +448,10 @@ class MidiEvent:
         self.delta_miditicks = None
         self.delta_us = None
         self.timestamp_us = None
+        self.track = None
 
     @micropython.native
-    def _set( self, event_status, data, delta_miditicks ):
+    def _set( self, event_status, data, delta_miditicks, track ):
         # Set event information to the event status byte, data and
         # delta time (in miditicks) specified in the parameters, replacing all
         # previous information in the event (if there was any).
@@ -476,6 +477,7 @@ class MidiEvent:
         self._data = data
         self.delta_miditicks = delta_miditicks
         self.delta_us = None
+        self.track = track
 
         return self
 
@@ -883,6 +885,7 @@ class MidiEvent:
         my_copy.delta_miditicks = self.delta_miditicks
         my_copy.delta_us = self.delta_us
         my_copy.timestamp_us = self.timestamp_us
+        my_copy.track = self.track
         return my_copy
 
     def is_meta( self ):
@@ -930,7 +933,8 @@ class MidiTrack:
                 filename,
                 reuse_event_object, 
                 buffer_size,
-                miditicks_per_quarter ):
+                miditicks_per_quarter,
+                track_number ):
         """
         The MidiTrack cosntructor is called internally by MidiFile,
         you don't need to create a MidiTrack.
@@ -945,6 +949,7 @@ class MidiTrack:
         self._reuse_event_object = reuse_event_object
         self._miditicks_per_quarter = miditicks_per_quarter
         self._buffer_size = buffer_size
+        self.track_number = track_number
         
         # MTrk header in file has just been processed, get chunk length
         self._track_length = int.from_bytes( file_object.read(4), "big" )
@@ -1023,7 +1028,7 @@ class MidiTrack:
         # This is used to parse a single track, for multitrack processing _track_parse_start
         # method is used
         return _process_events(
-                MidiParser( iter(self._get_midi_data()()) ).parse_events(),
+                MidiParser( iter(self._get_midi_data()()) ).parse_events(self.track_number),
                 self._miditicks_per_quarter,
                 self._reuse_event_object )
 
@@ -1033,7 +1038,7 @@ class MidiTrack:
     # has the next event.
     def _track_parse_start( self ):
         # This is an internal method called by MidiFile for multitrack processing.
-        self._track_parser = MidiParser( iter(self._get_midi_data()()) ).parse_events()
+        self._track_parser = MidiParser( iter(self._get_midi_data()()) ).parse_events(self.track_number)
 
         # Get first event to get things going...
         self.event = next( self._track_parser )
@@ -1112,7 +1117,7 @@ class MidiFile:
             # Get all track objects of the file.
             # Disregard the number of chunks, read the real number of tracks present.
             self.tracks = []
-            for _ in range(number_of_chunks):
+            for track_index in range(number_of_chunks):
                 track_id = file.read(4).decode( "latin-1" )
                 # Only process MTrk chunks
                 if track_id == "MTrk":
@@ -1120,7 +1125,8 @@ class MidiFile:
                          filename,
                          reuse_event_object,
                          buffer_size, 
-                         self._miditicks_per_quarter) )
+                         self._miditicks_per_quarter,
+                         track_index) )
                 else:
                     # Skip non-track chunk,
                     # use MidiTrack but ignore result
@@ -1128,7 +1134,8 @@ class MidiFile:
                           filename,
                           reuse_event_object,
                           10,
-                          self._miditicks_per_quarter )
+                          self._miditicks_per_quarter,
+                          track_index )
 
 
     def _get_header( self, file ):
